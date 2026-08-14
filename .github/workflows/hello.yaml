@@ -1,0 +1,25 @@
+name: My first github action
+
+on: 
+  push:
+    branches:
+      - main
+
+jobs:
+  hello-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Hello World Message
+        run: echo "Hello World!"
+      
+      - name: Print Current Date and Time
+        run: date
+
+      - name: List Files in Current Directory
+        run: ls -la
+      
+      - name: create a new file
+        run: echo "This is a new file created by GitHub Actions" > newfile.txt
+
+      - name: Display the contents of the new file
+        run: cat newfile.txt
