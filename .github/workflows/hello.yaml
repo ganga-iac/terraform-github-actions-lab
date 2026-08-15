@@ -1,6 +1,6 @@
-name: My first github action
+name: My First Github Action!
 
-on: 
+on:
   push:
     branches:
       - main
@@ -8,18 +8,20 @@ on:
 jobs:
   hello-job:
     runs-on: ubuntu-latest
+
     steps:
       - name: Print Hello World Message
-        run: echo "Hello World!"
-      
-      - name: Print Current Date and Time
-        run: date
+        run: echo "Welcome to my world!"
 
-      - name: List Files in Current Directory
-        run: ls -la
-      
-      - name: create a new file
-        run: echo "This is a new file created by GitHub Actions" > newfile.txt
+      - name: Create a file and add some data
+        run: echo "Welcome to GitHub Action!" > test.txt
 
-      - name: Display the contents of the new file
-        run: cat newfile.txt
+      - name: To see data in test file
+        run: cat test.txt
+
+      - name: List all the files in directory
+        run: ls -latr
+
+  
+
+
