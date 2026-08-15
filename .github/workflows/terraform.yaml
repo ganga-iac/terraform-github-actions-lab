@@ -17,7 +17,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Check terraform version
-        run: terraform --version
+        run: terraform version
 
       - name: format check
-        run: terraform fmt -check
+        run: terraform fmt -recursive terraform/
