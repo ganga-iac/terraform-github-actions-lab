@@ -22,6 +22,28 @@ jobs:
       - name: List all the files in directory
         run: ls -latr
 
+  window-job:
+    runs-on: windows-latest
+
+    steps:
+      - name: check the hostname
+        shell: pwsh
+        run: hostname
+
+      - name: Add some data in files
+        shell: pwsh
+        run: |
+          "Hello window server" | Out-File test.txt
+
+      - name: see data in test file
+        shell: pwsh
+        run: |
+          Get-Content test.txt
+
+  
+
+
+
   
 
 
