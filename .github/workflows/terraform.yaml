@@ -1,0 +1,23 @@
+name: Terraform setup for infrastature to aws resources
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Check terraform version
+        run: terraform --version
+
+      - name: format check
+        run: terraform fmt -check -recursive
