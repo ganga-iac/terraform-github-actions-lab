@@ -1,19 +1,39 @@
-variable "region" {
-  default = "us-east-1"
+variable "aws_region" {
+  description = "AWS region"
+  type        = string
+}
+
+variable "project_name" {
+  description = "Project name"
+  type        = string
+}
+
+variable "environment" {
+  description = "Environment name"
+  type        = string
 }
 
 variable "vpc_cidr" {
-  default = "10.0.0.0/16"
+  description = "CIDR block for VPC"
+  type        = string
 }
 
-variable "public_subnet" {
-  default = "10.0.1.0/24"
+variable "public_subnet_cidr" {
+  description = "CIDR block for public subnet"
+  type        = string
+}
+
+variable "availability_zone" {
+  description = "Availability Zone"
+  type        = string
 }
 
 variable "instance_type" {
-  default = "t3.micro"
+  description = "EC2 instance type"
+  type        = string
 }
 
-variable "ami" {
-  description = "Amazon Linux 2023 AMI"
+variable "key_name" {
+  description = "Existing EC2 key pair name"
+  type        = string
 }
