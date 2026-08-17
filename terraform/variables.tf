@@ -38,7 +38,7 @@ variable "key_name" {
   type        = string
 }
 
-variable "ami" {
-  description = "AMI ID for EC2 instance"
-  type        = string
-}
+# variable "ami" {
+#   description = "AMI ID for EC2 instance"
+#   type        = string
+# }

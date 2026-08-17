@@ -1,4 +1,4 @@
-ami = "ami-0bdc7d025135d7b49"
+# ami = "ami-0bdc7d025135d7b49"
 aws_region = "us-east-1"
 project_name = "github-actions-lab"
 environment = "dev"
