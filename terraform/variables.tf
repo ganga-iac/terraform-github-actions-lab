@@ -37,3 +37,8 @@ variable "key_name" {
   description = "Existing EC2 key pair name"
   type        = string
 }
+
+# variable "ami" {
+#   description = "AMI ID for EC2 instance"
+#   type        = string
+# }
