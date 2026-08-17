@@ -32,7 +32,8 @@ jobs:
 
       - name: Terraform format check
         working-directory: terraform
-        run: terraform fmt -check -recursive
+        run: |
+          terraform fmt -check -recursive -diff
 
       - name: Configure Aws Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -120,7 +121,7 @@ jobs:
         run: terraform plan -out tfplan
 
       - name: Upload terraform plan to Artifiact
-        uses: actions/upload-artifacts@v4
+        uses: actions/upload-artifact@v4
         with:
           name: terraform-plan
           path: terraform/tfplan 
