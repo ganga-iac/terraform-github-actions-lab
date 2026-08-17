@@ -36,12 +36,23 @@ jobs:
         run: |
           terraform fmt -check -recursive -diff
 
-      - name: Debug OIDC Token
+      - name: Debug OIDC Claims
+        id: oidc
         run: |
-          echo "Repository: ${{ github.repository }}"
-          echo "Event: ${{ github.event_name }}"
-          echo "Ref: ${{ github.ref }}"
-          echo "Environment: ${{ github.environment }}"
+          OIDC_TOKEN=$(curl -sS \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" \
+            | jq -r '.value')
+      
+          echo "$OIDC_TOKEN" | cut -d '.' -f2 | base64 -d 2>/dev/null | jq '{
+            sub,
+            aud,
+            repository,
+            repository_owner,
+            ref,
+            event_name,
+            environment
+          }'
 
       - name: Configure Aws Credentials
         uses: aws-actions/configure-aws-credentials@v4
