@@ -12,6 +12,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  id-token: write
   contents: read
 
 jobs:
@@ -35,11 +36,28 @@ jobs:
         run: |
           terraform fmt -check -recursive -diff
 
+      - name: Debug OIDC Claims
+        id: oidc
+        run: |
+          OIDC_TOKEN=$(curl -sS \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" \
+            | jq -r '.value')
+      
+          echo "$OIDC_TOKEN" | cut -d '.' -f2 | base64 -d 2>/dev/null | jq '{
+            sub,
+            aud,
+            repository,
+            repository_owner,
+            ref,
+            event_name,
+            environment
+          }'
+
       - name: Configure Aws Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::593002484164:role/GitHubActions-Terraform-Role
           aws-region: us-east-1
 
       - name: Identity Check
@@ -71,8 +89,7 @@ jobs:
       - name: Configure Aws Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::593002484164:role/GitHubActions-Terraform-Role
           aws-region: us-east-1
 
       - name: Terraform Init
@@ -104,8 +121,7 @@ jobs:
       - name: Configure Aws Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::593002484164:role/GitHubActions-Terraform-Role
           aws-region: us-east-1
 
       - name: Terraform Init
@@ -150,8 +166,7 @@ jobs:
       - name: Configure Aws Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::593002484164:role/GitHubActions-Terraform-Role
           aws-region: us-east-1
 
       - name: Terraform Init
