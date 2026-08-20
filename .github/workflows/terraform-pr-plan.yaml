@@ -23,6 +23,9 @@ jobs:
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::593002484164:role/GitHubActions-Terraform-Plan-Role
+          aws-region: us-east-1
 
       - name: Check aws Identity
         run: aws sts get-caller-identity
