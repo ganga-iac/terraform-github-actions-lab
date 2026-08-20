@@ -73,12 +73,6 @@ jobs:
           name: terraform-prod-plan
           path: terraform
 
-      - name: Aws configure Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::593002484164:role/GitHubActions-Terraform-Apply-Role
-          aws-region: us-east-1
-      
       - name: Debug OIDC Claims
         uses: actions/github-script@v7
         with:
@@ -98,6 +92,12 @@ jobs:
             console.log('Environment:', payload.environment);
             - name: Check Aws Identity
               run: aws sts get-caller-identity
+
+      - name: Aws configure Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::593002484164:role/GitHubActions-Terraform-Apply-Role
+          aws-region: us-east-1
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
