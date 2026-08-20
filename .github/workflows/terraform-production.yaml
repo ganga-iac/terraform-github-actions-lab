@@ -29,7 +29,7 @@ jobs:
       - name: Aws Configure Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          assume-role: arn:aws:iam::593002484164:role/GitHubActions-Terraform-Apply-Role
+          role-to-assume: arn:aws:iam::593002484164:role/GitHubActions-Terraform-Apply-Role
           aws-region: us-east-1
 
       - name: Setup Terraform
@@ -76,8 +76,8 @@ jobs:
       - name: Aws configure Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          assume-role: arn:aws:iam::593002484164:role/GitHubActions-Terraform-Apply-Role
-          region: us-east-1
+          role-to-assume: arn:aws:iam::593002484164:role/GitHubActions-Terraform-Apply-Role
+          aws-region: us-east-1
 
       - name: Check Aws Identity
         run: aws sts get-caller-identity
