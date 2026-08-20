@@ -19,6 +19,8 @@ jobs:
   terraform-plan:
     name: Terraform Plan
     runs-on: ubuntu-latest
+    environment:
+      name: terraform-production
 
     steps:
       - name: Checkout Repository
@@ -73,53 +75,6 @@ jobs:
           name: terraform-prod-plan
           path: terraform
 
-      - name: Debug OIDC Claims
-        shell: bash
-        run: |
-          echo "Requesting GitHub OIDC token..."
-      
-          TOKEN_RESPONSE=$(curl -sS \
-            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com")
-      
-          OIDC_TOKEN=$(echo "$TOKEN_RESPONSE" | jq -r '.value')
-      
-          if [ -z "$OIDC_TOKEN" ] || [ "$OIDC_TOKEN" = "null" ]; then
-            echo "Failed to obtain OIDC token"
-            exit 1
-          fi
-      
-          PAYLOAD=$(echo "$OIDC_TOKEN" | cut -d '.' -f2)
-      
-          # Add padding if necessary
-          case $((${#PAYLOAD} % 4)) in
-            2) PAYLOAD="${PAYLOAD}==" ;;
-            3) PAYLOAD="${PAYLOAD}=" ;;
-          esac
-      
-          CLAIMS=$(echo "$PAYLOAD" | base64 -d 2>/dev/null)
-      
-          echo "OIDC issuer:"
-          echo "$CLAIMS" | jq -r '.iss'
-      
-          echo "OIDC audience:"
-          echo "$CLAIMS" | jq -r '.aud'
-      
-          echo "OIDC subject:"
-          echo "$CLAIMS" | jq -r '.sub'
-      
-          echo "Repository:"
-          echo "$CLAIMS" | jq -r '.repository'
-      
-          echo "Repository ID:"
-          echo "$CLAIMS" | jq -r '.repository_id'
-      
-          echo "Repository owner ID:"
-          echo "$CLAIMS" | jq -r '.repository_owner_id'
-      
-          echo "Environment:"
-          echo "$CLAIMS" | jq -r '.environment'
-
       - name: Aws configure Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -130,9 +85,11 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
+        working-directory: terraform
         run: terraform init
 
       - name: Terraform Apply
+        working-directory: terraform
         run: terraform apply --auto-approve tfplan
 
 
